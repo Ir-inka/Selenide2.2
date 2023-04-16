@@ -35,7 +35,7 @@ public class CardDeliveryOrder {
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id=date] input").setValue(valueOf(date));
+        $("[data-test-id=date] input").sendKeys(format(date));
         $("[data-test-id=name] input").setValue("Осипов Василий");
         $("[data-test-id=phone] input").setValue("+79876543210");
         $("[data-test-id=agreement]").click();
