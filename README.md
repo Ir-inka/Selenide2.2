@@ -1,0 +1,1 @@
+[![Статус сборки](https://ci.appveyor.com/api/projects/status/aq6ir3w2qunihmm8?svg=true)](https://ci.appveyor.com/project/Ir-inka/selenide2-2 )
