@@ -12,9 +12,13 @@ import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.String.format;
+import static java.lang.String.valueOf;
 
 public class CardDeliveryOrder {
-    public String date = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")); // Бронирование встречи через 4 дня от сегодня
+    public String generateDate(long addDays, String pattern) {
+        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
+    }
+    //public String date = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")); // Бронирование встречи через 4 дня от сегодня
 
 
     @BeforeEach
@@ -25,20 +29,23 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void filledFieldsValid() {                                                                // Поля заполнены
+    void filledFieldsValid() {                                                                       // Поля заполнены
+
+        String date = generateDate(4,"dd.MM.yyyy");
 
         $("[data-test-id =city] input").setValue("Москва");
-        $("[data-test-id=date] input").doubleClick();
-        $("[data-test-id=date] input").sendKeys(format(date));
+        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=date] input").setValue(valueOf(date));
         $("[data-test-id=name] input").setValue("Осипов Василий");
         $("[data-test-id=phone] input").setValue("+79876543210");
         $("[data-test-id=agreement]").click();
         $x("//button//span[contains(text(),'Забронировать')]").click();
-        $("[data-test-id='notification']").should(Condition.text("Встреча успешно забронирована на " + date), Duration.ofSeconds(15)).shouldBe(Condition.visible);
+        $("[data-test-id='notification']").should(Condition.text("Успешно! Встреча успешно забронирована на " + date), Duration.ofSeconds(15)).shouldBe(Condition.visible);
     }
-
     @Test
-    void cityNotListed() {                                                        // Город не входит в один из административных центров субъектов РФ
+    void cityNotListed() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                   // Город не входит в один из административных центров субъектов РФ
 
         $("[data-test-id =city] input").setValue("Галич");
         $("[data-test-id=date] input").doubleClick();
@@ -51,7 +58,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void surnameAndNameInLatin() {                                                               // Фамилия и Имя на латинице
+    void surnameAndNameInLatin() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                    // Фамилия и Имя на латинице
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -64,7 +73,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void cityInLatin() {                                                                             // Город на латинице
+    void cityInLatin() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                     // Город на латинице
 
         $("[data-test-id =city] input").setValue("Moscow");
         $("[data-test-id=date] input").doubleClick();
@@ -77,7 +88,7 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void emptyDateField() {                                             // Пустое поле дата
+    void emptyDateField() {                                                                        // Пустое поле дата
 
         $("[data-test-id=city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.DELETE);
@@ -89,7 +100,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void emptyFieldCity() {                                                              // пустое поле Город
+    void emptyFieldCity() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                      // пустое поле Город
 
         $("[data-test-id =city] input").setValue(" ");
         $("[data-test-id=date] input").doubleClick();
@@ -102,7 +115,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void nameSurnameNotFilled() {                                                    // Пустое поле Фамилия и Имя
+    void nameSurnameNotFilled() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                           // Пустое поле Фамилия и Имя
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -115,7 +130,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void withoutPhone() {                                                          // Пустое поле номера телефона
+    void withoutPhone() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                // Пустое поле номера телефона
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -128,7 +145,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void phoneNumberSmaller() {                                                          // В номере меньше цифр
+    void phoneNumberSmaller() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                        // В номере меньше цифр
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -141,7 +160,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void phoneMoreNumbers() {                                                          // В номере больше цифр
+    void phoneMoreNumbers() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                        // В номере больше цифр
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -154,7 +175,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void phoneInLatin() {                                                          // Номер указан латиницей
+    void phoneInLatin() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                              // Номер указан латиницей
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -167,7 +190,9 @@ public class CardDeliveryOrder {
     }
 
     @Test
-    void phoneInCyrillic() {                                                          // Номер указан кириллицей
+    void phoneInCyrillic() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                     // Номер указан кириллицей
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
@@ -181,7 +206,9 @@ public class CardDeliveryOrder {
 
 
     @Test
-    void doNotTick() {                                                                // Галочку не поставим
+    void doNotTick() {
+
+        String date = generateDate(4,"dd.MM.yyyy");                                                      // Галочку не поставим
 
         $("[data-test-id =city] input").setValue("Москва");
         $("[data-test-id=date] input").doubleClick();
